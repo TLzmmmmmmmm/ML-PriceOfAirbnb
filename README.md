@@ -54,3 +54,7 @@ The fold assignment is generated in memory and is not committed. Aggregate fold 
 `src/preprocessing.py` parses the structured numeric, currency, percentage, date, and low-cardinality categorical fields. Numeric medians and categorical vocabularies are fitted only on the current fold's training rows. High-cardinality categories, free text, and collection-like text fields remain deferred to their dedicated experiments.
 
 The complete field grouping and exclusion rationale are recorded in `reports/feature_groups.md`.
+
+## Current model benchmark
+
+E003 trains histogram gradient boosting on the structured feature matrix. Its mean five-fold RMSE is `87.2869`, compared with `111.9119` for the official linear baseline. The configuration and fold results are recorded in `experiments/E003_hist_gradient_boosting.json` and `reports/first_tabular_model.md`.

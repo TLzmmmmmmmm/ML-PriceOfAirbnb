@@ -1,0 +1,54 @@
+{
+  "experiment_id": "E003",
+  "name": "hist_gradient_boosting_structured",
+  "evaluated_at": "2026-11-11",
+  "model": "sklearn.ensemble.HistGradientBoostingRegressor",
+  "features": "Step 5 structured preprocessing output",
+  "validation": {
+    "protocol": "Five shuffled K-fold splits sorted by id before assignment",
+    "n_splits": 5,
+    "random_state": 151,
+    "metric": "RMSE in original price dollars"
+  },
+  "parameters": {
+    "loss": "squared_error",
+    "learning_rate": 0.05,
+    "max_iter": 500,
+    "max_leaf_nodes": 31,
+    "min_samples_leaf": 20,
+    "l2_regularization": 1.0,
+    "early_stopping": true,
+    "validation_fraction": 0.1,
+    "n_iter_no_change": 30,
+    "random_state": 151
+  },
+  "results": {
+    "fold_rmse": [
+      83.80264498698169,
+      90.47292416663045,
+      85.65336709067,
+      92.20402799525137,
+      84.3017834783513
+    ],
+    "mean_rmse": 87.28694954357695,
+    "std_rmse": 3.4072945604744103,
+    "overall_oof_rmse": 87.35336780264883,
+    "iterations": [206, 246, 283, 188, 223],
+    "feature_counts": [114, 114, 112, 112, 109],
+    "runtime_seconds": 12.674177900000359
+  },
+  "comparison": {
+    "absolute_improvement_over_mean_baseline": 45.741537180838606,
+    "relative_improvement_over_mean_baseline_pct": 34.38476848616468,
+    "absolute_improvement_over_official_linear_baseline": 24.624989684792425,
+    "relative_improvement_over_official_linear_baseline_pct": 22.003898649760917,
+    "margin_below_rmse_100": 12.713050456423048,
+    "margin_below_working_target_92": 4.713050456423048
+  },
+  "local_artifacts": {
+    "fold_models": "models/E003_fold_0.joblib through models/E003_fold_4.joblib",
+    "oof_predictions": "models/E003_oof_predictions.npy",
+    "oof_sha256": "51de7e406177ee7e48b11cf47d640482843b22d7fc8caa6819f4e03ee1e6dfa9",
+    "artifacts_are_git_ignored": true
+  }
+}
