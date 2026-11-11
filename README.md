@@ -37,3 +37,14 @@ Every submission must be traceable to one experiment record. Do not overwrite an
 - Do not modify the official input files.
 - Evaluate experiments with RMSE using the fixed local validation protocol.
 - A submission must contain exactly `Id` and `Predicted`, with IDs in `test.csv` order.
+
+## Local validation protocol
+
+All experiments use the shared functions in `src/validation.py`:
+
+- Sort listings by `id`, then assign five shuffled K-fold splits.
+- Use `random_state=151` for every experiment.
+- Score predictions with RMSE in the original dollar units.
+- Fit preprocessing and models only on the training portion of each fold.
+
+The fold assignment is generated in memory and is not committed. Aggregate fold checks are recorded in `reports/validation_protocol.md`.

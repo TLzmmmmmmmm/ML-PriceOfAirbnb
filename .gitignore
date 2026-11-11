@@ -19,4 +19,5 @@ submissions/*
 !submissions/.gitkeep
 reports/*
 !reports/.gitkeep
+!reports/*.md
 
