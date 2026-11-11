@@ -58,3 +58,5 @@ The complete field grouping and exclusion rationale are recorded in `reports/fea
 ## Current model benchmark
 
 E003 trains histogram gradient boosting on the structured feature matrix. Its mean five-fold RMSE is `87.2869`, compared with `111.9119` for the official linear baseline. The configuration and fold results are recorded in `experiments/E003_hist_gradient_boosting.json` and `reports/first_tabular_model.md`.
+
+Step 7 compared raw squared-error training with a log target and absolute-error loss. Raw dollar price with squared-error loss remains selected because both alternatives increased total RMSE by underpredicting expensive listings. See `reports/target_strategy_comparison.md`.

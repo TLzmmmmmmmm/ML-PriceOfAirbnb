@@ -1,0 +1,32 @@
+{
+  "experiment_id": "E005",
+  "name": "raw_target_absolute_error",
+  "evaluated_at": "2026-11-11",
+  "model": "E003 HistGradientBoostingRegressor with absolute-error training loss",
+  "validation_metric": "RMSE in original price dollars",
+  "results": {
+    "fold_rmse": [86.56717493805577, 96.41964204349773, 90.65657513199496, 96.79338650770414, 91.3595860259525],
+    "mean_rmse": 92.35927292944102,
+    "std_rmse": 3.8365326377750586,
+    "overall_oof_rmse": 92.43882098188175,
+    "iterations": [500, 264, 461, 500, 500],
+    "feature_counts": [114, 114, 112, 112, 109],
+    "runtime_seconds": 24.333685899999182,
+    "negative_predictions": 0
+  },
+  "price_band_metrics": {
+    "price_le_100": {"count": 16274, "rmse": 29.27685477556313, "mean_error": 11.027952962028097},
+    "price_100_to_300": {"count": 14986, "rmse": 55.734159790835555, "mean_error": -12.183841775490285},
+    "price_300_to_500": {"count": 1595, "rmse": 156.13160522325538, "mean_error": -113.58560887663468},
+    "price_gt_500": {"count": 683, "rmse": 523.5293122806802, "mean_error": -415.5858713505213}
+  },
+  "comparison_to_e003": {
+    "mean_rmse_change": 5.072323385864071,
+    "decision": "reject"
+  },
+  "local_artifacts": {
+    "oof_predictions": "models/E005_oof_predictions.npy",
+    "oof_sha256": "aefe4f3eed769d47a3e661267f1916a8a77f7db4d681ef484620932caca67e52",
+    "artifacts_are_git_ignored": true
+  }
+}
