@@ -48,3 +48,9 @@ All experiments use the shared functions in `src/validation.py`:
 - Fit preprocessing and models only on the training portion of each fold.
 
 The fold assignment is generated in memory and is not committed. Aggregate fold checks are recorded in `reports/validation_protocol.md`.
+
+## Structured preprocessing
+
+`src/preprocessing.py` parses the structured numeric, currency, percentage, date, and low-cardinality categorical fields. Numeric medians and categorical vocabularies are fitted only on the current fold's training rows. High-cardinality categories, free text, and collection-like text fields remain deferred to their dedicated experiments.
+
+The complete field grouping and exclusion rationale are recorded in `reports/feature_groups.md`.
