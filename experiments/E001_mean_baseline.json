@@ -1,0 +1,27 @@
+{
+  "experiment_id": "E001",
+  "name": "mean_baseline",
+  "evaluated_at": "2026-11-11",
+  "model": "Predict the fold-training mean price for every validation row",
+  "validation": {
+    "protocol": "Five shuffled K-fold splits sorted by id before assignment",
+    "n_splits": 5,
+    "random_state": 151,
+    "metric": "RMSE in original price dollars"
+  },
+  "results": {
+    "fold_rmse": [
+      127.90938653255238,
+      136.8734824455148,
+      127.9979564380581,
+      135.31624894028175,
+      137.0453592656706
+    ],
+    "mean_rmse": 133.02848672441556,
+    "std_rmse": 4.187231419460805,
+    "runtime_seconds": 0.31166530000336934
+  },
+  "compatibility": {
+    "full_train_prediction_max_abs_diff_from_official_file": 0.0
+  }
+}

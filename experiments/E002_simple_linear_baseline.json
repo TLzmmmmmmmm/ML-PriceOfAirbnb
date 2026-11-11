@@ -1,0 +1,44 @@
+{
+  "experiment_id": "E002",
+  "name": "official_simple_linear_baseline",
+  "evaluated_at": "2026-11-11",
+  "model": "Ordinary least squares using the official notebook feature construction",
+  "validation": {
+    "protocol": "Five shuffled K-fold splits sorted by id before assignment",
+    "n_splits": 5,
+    "random_state": 151,
+    "metric": "RMSE in original price dollars",
+    "neighborhood_categories_fitted_on_fold_training_rows_only": true
+  },
+  "features": [
+    "guests_included parsed with int()",
+    "extra_people parsed with int()",
+    "bedrooms parsed with int()",
+    "bathrooms parsed with int()",
+    "review_scores_rating parsed with float()",
+    "neighbourhood_group_cleansed one-hot encoding"
+  ],
+  "results": {
+    "fold_rmse": [
+      107.73242270452768,
+      115.12978135450253,
+      108.85839113756434,
+      115.12484125268672,
+      112.71425969256559
+    ],
+    "mean_rmse": 111.91193922836938,
+    "std_rmse": 3.1020470599193852,
+    "runtime_seconds": 1.4906282000010833
+  },
+  "compatibility": {
+    "full_train_prediction_max_abs_diff_from_official_file": 3.728928277269006e-11,
+    "full_train_prediction_mean_abs_diff_from_official_file": 1.8109253818235892e-12,
+    "matches_official_file_at_absolute_tolerance_1e-8": true
+  },
+  "known_defects": {
+    "extra_people_rows_encoded_as_minus_one": 33538,
+    "extra_people_total_rows": 33538,
+    "fractional_bathroom_rows_truncated_to_integer": 1876,
+    "negative_predictions_in_official_submission_file": 17
+  }
+}

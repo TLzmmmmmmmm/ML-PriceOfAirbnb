@@ -43,7 +43,8 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | 1 | Complete | Six official files inspected; structure, missingness, target distribution, baseline files, and risks documented in chat |
 | 2 | Complete | Reproducible project structure created and pushed in commit `47a27ab` |
 | 3 | Complete | Fixed five-fold validation protocol created and pushed in commit `4f6318b` |
-| 4–15 | Not started | Must follow the confirmation rule before execution |
+| 4 | Complete | Mean and official linear baselines measured in five-fold validation; comparison recorded in `reports/baseline_comparison.md` |
+| 5–15 | Not started | Must follow the confirmation rule before execution |
 
 ## Step 1: Audit files, data, and rules
 
