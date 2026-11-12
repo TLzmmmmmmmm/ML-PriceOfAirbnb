@@ -63,6 +63,7 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | E016 | Complete | Adding fold-trained `neighbourhood_cleansed` and `zipcode` one-hot features to E014 improved all five folds and reduced mean RMSE from `85.3451` to `82.7194`; retained as the new best single model |
 | E016 submission | Complete | Full-data model trained with 807 features and 471 iterations; validated 17,337-row `E016_location_20261111.csv` generated locally without upload |
 | E017 | Complete | A fixed 90% E016 / 10% E012 blend improved all five folds, reduced mean RMSE to `82.3433`, and produced a validated local submission without upload |
+| E018 | Complete | CatBoost on the same source fields reached mean RMSE `82.4159` but improved only 3/5 folds and missed the predefined replacement gate; rejected for direct submission |
 
 ## Step 1: Audit files, data, and rules
 

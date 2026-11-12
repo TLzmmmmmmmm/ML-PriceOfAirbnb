@@ -1,0 +1,84 @@
+{
+  "experiment_id": "E018",
+  "name": "catboost_same_source_features_as_e016",
+  "evaluated_at": "2026-11-12",
+  "baseline_experiment": "E016",
+  "model": "catboost.CatBoostRegressor",
+  "environment": {
+    "python": "3.12.5",
+    "catboost": "1.2.10",
+    "numpy": "2.4.1",
+    "pandas": "3.0.0",
+    "scikit_learn": "1.9.1",
+    "requirements_file": "requirements-catboost.txt"
+  },
+  "parameters": {
+    "loss_function": "RMSE",
+    "eval_metric": "RMSE",
+    "iterations": 2000,
+    "learning_rate": 0.03,
+    "depth": 8,
+    "l2_leaf_reg": 5.0,
+    "random_seed": 151,
+    "thread_count": 4,
+    "used_ram_limit": "4gb",
+    "allow_writing_files": false,
+    "early_stopping_rounds": 100
+  },
+  "features": {
+    "source_fields": "same as E016",
+    "native_categorical_columns": 18,
+    "amenity_features_per_fold": [94, 94, 94, 94, 94],
+    "total_features_per_fold": [142, 142, 142, 142, 142]
+  },
+  "validation": {
+    "outer_splits": 5,
+    "outer_random_state": 151,
+    "inner_validation_fraction": 0.1,
+    "inner_random_state": 151,
+    "outer_validation_role": "scoring only; not used for early stopping",
+    "metric": "RMSE in original price dollars"
+  },
+  "results": {
+    "fold_rmse": [
+      78.08587009869548,
+      87.27774813674313,
+      80.4304161193101,
+      86.92652972632375,
+      79.3587353676089
+    ],
+    "mean_rmse": 82.41585988973627,
+    "std_rmse": 3.8992539953410983,
+    "overall_oof_rmse": 82.50800579696512,
+    "best_iterations": [1132, 1260, 1977, 1992, 1817],
+    "runtime_seconds": 924.9409198999929,
+    "negative_predictions": 0
+  },
+  "comparison_with_e016": {
+    "e016_mean_rmse": 82.71944165679726,
+    "mean_rmse_improvement": 0.30358176706100437,
+    "fold_improvements": [
+      0.8010915131719258,
+      -0.8877217490495468,
+      1.215052801968966,
+      0.41213227598836966,
+      -0.022646006774763805
+    ],
+    "folds_improved": 3,
+    "prediction_correlation": 0.971461711669491,
+    "error_correlation": 0.9553975047337829,
+    "retention_gate": "mean improvement >= 0.5, at least 4/5 folds improved, and no material dispersion increase",
+    "decision": "reject as a direct E016 replacement"
+  },
+  "local_artifacts": {
+    "oof_rows": 33538,
+    "oof_all_finite": true,
+    "oof_sha256": "5570ed9696d21ebdf3600efc36fe7316f7479948c36f557a6ea2a6e17ee70edf",
+    "fold_model_count": 5,
+    "artifacts_are_git_ignored": true
+  },
+  "submission": {
+    "generated": false,
+    "uploaded": false
+  }
+}
