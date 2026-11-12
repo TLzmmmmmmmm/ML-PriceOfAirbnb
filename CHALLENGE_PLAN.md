@@ -51,7 +51,8 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | 9 | Complete | E012 combined TF-IDF reached mean RMSE `104.4921`; retained as an ensemble candidate |
 | 10 | Complete | E014 frequent amenity indicators improved all folds and reduced mean RMSE to `85.3451` |
 | 11 | Complete | E015 weighted ensemble improved all folds and reduced mean RMSE to `84.5293` |
-| 12–15 | Not started | Must follow the confirmation rule before execution |
+| 12 | Complete | Validated E014 and E015 submission files generated from full-data models |
+| 13–15 | Not started | Must follow the confirmation rule before execution |
 
 ## Step 1: Audit files, data, and rules
 

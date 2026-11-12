@@ -67,4 +67,6 @@ Step 10 parses the supplied amenities and learns frequent indicators inside each
 
 Step 11 evaluates a small predeclared set of OOF weighted averages. E015 combines E014 (75%), E009 (10%), and E012 (15%), improving all five folds and lowering mean RMSE to `84.5293`. E014 remains the best single-model alternative. See `reports/ensemble_comparison.md`.
 
+Step 12 retrains E014 and every E015 component on all 33,538 training rows. Validated 17,337-row E014 and E015 submission files are stored locally under `submissions/` and remain excluded from Git. Aggregate validation receipts and SHA-256 hashes are recorded in `reports/submission_validation.md`.
+
 Step 7 compared raw squared-error training with a log target and absolute-error loss. Raw dollar price with squared-error loss remains selected because both alternatives increased total RMSE by underpredicting expensive listings. See `reports/target_strategy_comparison.md`.
