@@ -87,6 +87,60 @@ def fit_full_components(
     }
 
 
+def fit_full_e016(
+    training: pd.DataFrame,
+    test: pd.DataFrame,
+    *,
+    artifact_path: str | Path,
+) -> dict[str, object]:
+    """Fit E016 on all training rows and predict the aligned test rows."""
+    artifact_path = Path(artifact_path)
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    extra_categorical_columns = ("neighbourhood_cleansed", "zipcode")
+    target = training["price"].to_numpy(dtype=float)
+
+    structured = StructuredPreprocessor(
+        feature_groups=("text_structure",),
+        extra_categorical_columns=extra_categorical_columns,
+    )
+    amenities = AmenitiesTransformer(
+        include_indicators=True,
+        min_frequency=0.01,
+        max_features=100,
+    )
+    training_matrix = np.hstack(
+        [
+            structured.fit_transform(training),
+            amenities.fit_transform(training["amenities"]),
+        ]
+    )
+    test_matrix = np.hstack(
+        [
+            structured.transform(test),
+            amenities.transform(test["amenities"]),
+        ]
+    )
+    model = build_e003_model()
+    model.fit(training_matrix, target)
+    predictions = model.predict(test_matrix)
+    joblib.dump(
+        {
+            "structured_preprocessor": structured,
+            "amenities_transformer": amenities,
+            "model": model,
+        },
+        artifact_path,
+    )
+
+    return {
+        "predictions": predictions,
+        "iterations": int(model.n_iter_),
+        "feature_count": int(training_matrix.shape[1]),
+        "amenity_feature_count": len(amenities.get_feature_names_out()),
+        "extra_categorical_columns": list(extra_categorical_columns),
+    }
+
+
 def create_submission(
     ids: pd.Series,
     predictions: np.ndarray,

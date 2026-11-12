@@ -40,6 +40,16 @@ def _full_training_frame(rows=60):
         "{Wifi,Kitchen}",
         "{Heating}",
     )
+    data["neighbourhood_cleansed"] = np.where(
+        row_number % 2 == 0,
+        "Chelsea",
+        "SoHo",
+    )
+    data["zipcode"] = np.where(
+        row_number % 2 == 0,
+        "10001",
+        "10002",
+    )
     data["id"] = row_number + 1000
     data["price"] = 50.0 + 20.0 * data["accommodates"]
     return pd.DataFrame(data)
@@ -61,6 +71,37 @@ def test_fit_full_components_returns_aligned_predictions_and_artifacts(tmp_path)
         "E009_full.joblib",
         "E012_full.joblib",
         "E014_full.joblib",
+    ]
+
+
+def test_fit_full_e016_returns_location_model_predictions_and_metadata(tmp_path):
+    import joblib
+
+    from src.submission import fit_full_e016
+
+    training = _full_training_frame()
+    test = _full_training_frame(rows=12).drop(columns="price")
+    artifact_path = tmp_path / "E016_full.joblib"
+
+    result = fit_full_e016(training, test, artifact_path=artifact_path)
+    artifact = joblib.load(artifact_path)
+    feature_names = (
+        artifact["structured_preprocessor"].get_feature_names_out().tolist()
+    )
+
+    assert result["predictions"].shape == (len(test),)
+    assert np.isfinite(result["predictions"]).all()
+    assert result["extra_categorical_columns"] == [
+        "neighbourhood_cleansed",
+        "zipcode",
+    ]
+    assert result["feature_count"] > result["amenity_feature_count"]
+    assert result["iterations"] > 0
+    assert "neighbourhood_cleansed_Chelsea" in feature_names
+    assert "zipcode_10001" in feature_names
+    assert artifact_path.is_file()
+    assert sorted(path.name for path in tmp_path.glob("*.joblib")) == [
+        "E016_full.joblib"
     ]
 
 

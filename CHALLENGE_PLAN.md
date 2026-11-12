@@ -61,6 +61,7 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | Experiment | Status | Main result |
 |---:|---|---|
 | E016 | Complete | Adding fold-trained `neighbourhood_cleansed` and `zipcode` one-hot features to E014 improved all five folds and reduced mean RMSE from `85.3451` to `82.7194`; retained as the new best single model |
+| E016 submission | Complete | Full-data model trained with 807 features and 471 iterations; validated 17,337-row `E016_location_20261111.csv` generated locally without upload |
 
 ## Step 1: Audit files, data, and rules
 

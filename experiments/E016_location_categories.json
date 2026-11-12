@@ -56,8 +56,28 @@
     "fold_model_count": 5,
     "artifacts_are_git_ignored": true
   },
+  "full_training": {
+    "training_rows": 33538,
+    "iterations": 471,
+    "feature_count": 807,
+    "amenity_feature_count": 94,
+    "model_file": "models/E016_full.joblib",
+    "model_sha256": "333242e57b97c026b2e8788175e05e35c50c736fe9b4f06aef2c87d4e1f4c049",
+    "model_is_git_ignored": true
+  },
   "submission": {
-    "generated": false,
-    "uploaded": false
+    "generated": true,
+    "uploaded": false,
+    "file": "submissions/E016_location_20261111.csv",
+    "rows": 17337,
+    "sha256": "1e60540c0fa533960ddf5511020ab1cfe5936db3007905ba3303870649686c1b",
+    "clipped_negative_predictions": 0,
+    "duplicate_ids": 0,
+    "nonfinite_predictions": 0,
+    "negative_predictions": 0,
+    "prediction_min": 8.424645732245894,
+    "prediction_max": 1145.2623102219156,
+    "prediction_mean": 144.17175913297916,
+    "submission_is_git_ignored": true
   }
 }
