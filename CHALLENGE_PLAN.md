@@ -54,7 +54,7 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | 12 | Complete | Validated E014 and E015 submission files generated from full-data models |
 | 13 | Complete | E015 scored `83.97699`, public rank 34, versus E014 `84.49803`; local ordering confirmed |
 | 14 | Complete | E015 primary and E014 secondary selected on Kaggle; confirmation shows `2/2` |
-| 15 | Not started | Must follow the confirmation rule before execution |
+| 15 | Complete | Final E014/E015 submissions independently reproduced exactly; repository archived safely |
 
 ## Step 1: Audit files, data, and rules
 

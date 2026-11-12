@@ -73,4 +73,6 @@ Step 13 records public leaderboard scores of `84.49803` for E014 and `83.97699` 
 
 Step 14 selects E015 as the primary final candidate and E014 as the single-model secondary candidate. Kaggle confirmation shows both checked and `2/2` final selections active. See `reports/final_submission_selection.md`.
 
+Step 15 independently retrains the complete final pipeline from the official CSV inputs. E014 and E015 reproduce with zero numerical difference and exact CSV SHA-256 matches. Package versions, input hashes, repository safety checks, and final mappings are recorded in `reports/final_reproducibility.md`; the concise method summary is in `FINAL_SOLUTION.md`.
+
 Step 7 compared raw squared-error training with a log target and absolute-error loss. Raw dollar price with squared-error loss remains selected because both alternatives increased total RMSE by underpredicting expensive listings. See `reports/target_strategy_comparison.md`.
