@@ -31,5 +31,6 @@
   },
   "reproduction": {"fold_metrics_match": true, "oof_sha256_match": true},
   "local_artifacts": {"oof_predictions": "models/E015_oof_predictions.npy", "oof_sha256": "745cc73a522b6d5479cc7f918fc8e8339c42e41c489a198538ed003ff349fd12", "artifacts_are_git_ignored": true},
-  "submission": {"file": "submissions/E015_weighted_20261111.csv", "rows": 17337, "sha256": "966aee32247f879a214e9fa0f3416b03af0431964070505cc9581070fe042053", "negative_predictions": 0, "clipped_predictions": 0, "git_ignored": true}
+  "submission": {"file": "submissions/E015_weighted_20261111.csv", "rows": 17337, "sha256": "966aee32247f879a214e9fa0f3416b03af0431964070505cc9581070fe042053", "negative_predictions": 0, "clipped_predictions": 0, "git_ignored": true},
+  "public_leaderboard": {"status": "Complete", "score": 83.97699, "captured_at": "2026-11-11 17:51:40 -08:00", "rank": null, "selected_for_final": false}
 }
