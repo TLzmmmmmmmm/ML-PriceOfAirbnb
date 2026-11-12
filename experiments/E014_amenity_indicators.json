@@ -31,5 +31,5 @@
   "local_artifacts": {"oof_sha256": "21d8e68257928cdec89670d07baf6f394e15fec3921075a357b4b8efec83a658", "artifacts_are_git_ignored": true},
   "full_training": {"training_rows": 33538, "iterations": 274, "feature_count": 218, "selected_amenities": 93},
   "submission": {"file": "submissions/E014_full_20261111.csv", "rows": 17337, "sha256": "b11143d93bcc6e0113fda0106d7385091752944b0f5d64e583313a69acafea18", "git_ignored": true},
-  "public_leaderboard": {"status": "Complete", "score": 84.49803, "captured_at": "2026-11-11 17:51:40 -08:00", "rank": null, "selected_for_final": false}
+  "public_leaderboard": {"status": "Complete", "score": 84.49803, "captured_at": "2026-11-11 17:51:40 -08:00", "rank": null, "selected_for_final": true, "final_selection_captured_at": "2026-11-11 18:03:44 -08:00"}
 }

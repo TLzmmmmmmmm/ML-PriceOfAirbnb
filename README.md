@@ -71,4 +71,6 @@ Step 12 retrains E014 and every E015 component on all 33,538 training rows. Vali
 
 Step 13 records public leaderboard scores of `84.49803` for E014 and `83.97699` for E015. E015 placed team `Terry Li` at public rank 34 in the supplied snapshot. The public ordering agrees with local validation, so both candidates are retained without leaderboard-driven model changes. See `reports/leaderboard_log.md`.
 
+Step 14 selects E015 as the primary final candidate and E014 as the single-model secondary candidate. Kaggle confirmation shows both checked and `2/2` final selections active. See `reports/final_submission_selection.md`.
+
 Step 7 compared raw squared-error training with a log target and absolute-error loss. Raw dollar price with squared-error loss remains selected because both alternatives increased total RMSE by underpredicting expensive listings. See `reports/target_strategy_comparison.md`.
