@@ -69,6 +69,6 @@ Step 11 evaluates a small predeclared set of OOF weighted averages. E015 combine
 
 Step 12 retrains E014 and every E015 component on all 33,538 training rows. Validated 17,337-row E014 and E015 submission files are stored locally under `submissions/` and remain excluded from Git. Aggregate validation receipts and SHA-256 hashes are recorded in `reports/submission_validation.md`.
 
-Step 13 records public leaderboard scores of `84.49803` for E014 and `83.97699` for E015. The public ordering agrees with local validation, so both candidates are retained without leaderboard-driven model changes. See `reports/leaderboard_log.md`.
+Step 13 records public leaderboard scores of `84.49803` for E014 and `83.97699` for E015. E015 placed team `Terry Li` at public rank 34 in the supplied snapshot. The public ordering agrees with local validation, so both candidates are retained without leaderboard-driven model changes. See `reports/leaderboard_log.md`.
 
 Step 7 compared raw squared-error training with a log target and absolute-error loss. Raw dollar price with squared-error loss remains selected because both alternatives increased total RMSE by underpredicting expensive listings. See `reports/target_strategy_comparison.md`.

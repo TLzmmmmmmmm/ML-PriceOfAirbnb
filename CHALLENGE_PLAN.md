@@ -52,7 +52,7 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | 10 | Complete | E014 frequent amenity indicators improved all folds and reduced mean RMSE to `85.3451` |
 | 11 | Complete | E015 weighted ensemble improved all folds and reduced mean RMSE to `84.5293` |
 | 12 | Complete | Validated E014 and E015 submission files generated from full-data models |
-| 13 | Complete | E015 scored `83.97699` publicly versus E014 `84.49803`; local ordering confirmed |
+| 13 | Complete | E015 scored `83.97699`, public rank 34, versus E014 `84.49803`; local ordering confirmed |
 | 14–15 | Not started | Must follow the confirmation rule before execution |
 
 ## Step 1: Audit files, data, and rules
