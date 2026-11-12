@@ -1,0 +1,21 @@
+{
+  "experiment_id": "E011",
+  "name": "character_tfidf_ridge",
+  "evaluated_at": "2026-11-11",
+  "model": "sklearn.linear_model.Ridge",
+  "text_fields": ["name", "summary", "description", "space", "neighborhood_overview", "house_rules", "host_about"],
+  "vectorizer": {"analyzer": "char_wb", "ngram_range": [3, 5], "min_df": 3, "max_features": 60000, "sublinear_tf": true, "dtype": "float32"},
+  "parameters": {"alpha": 20.0, "solver": "lsqr"},
+  "validation": {"n_splits": 5, "random_state": 151, "metric": "RMSE in original price dollars", "vectorizer_fit_scope": "training fold only"},
+  "results": {
+    "fold_rmse": [103.31882527151174, 111.86867064456709, 103.22209522712153, 111.39873748059838, 110.40563287407008],
+    "mean_rmse": 108.04279229957376,
+    "std_rmse": 3.9252442852842675,
+    "overall_oof_rmse": 108.11390327308591,
+    "feature_counts": [60000, 60000, 60000, 60000, 60000],
+    "runtime_seconds": 371.941032499999,
+    "negative_predictions": 44
+  },
+  "complementarity_with_e009": {"error_correlation": 0.7157105514912377, "fold_error_correlations": [0.7101225679002847, 0.7435754911972502, 0.7110447431943109, 0.7343169532285813, 0.6764708971996135], "equal_weight_blend_oof_rmse": 90.5470529753803},
+  "local_artifacts": {"oof_sha256": "aaa081ee83bf72a08a201f5dedaa35f7d410659d9c1e9c079194405e42276386", "artifacts_are_git_ignored": true}
+}

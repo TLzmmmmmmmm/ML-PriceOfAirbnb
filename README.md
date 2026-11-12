@@ -61,4 +61,6 @@ E003 trains histogram gradient boosting on the structured feature matrix. Its me
 
 Step 8 evaluates four compact feature groups as controlled ablations. Only text length and missingness indicators are retained: E009 reaches mean five-fold RMSE `87.1546`, while date relations, capacity ratios, and host-scale features are rejected. Definitions and per-fold results are recorded in `reports/feature_engineering_ablation.md`.
 
+Step 9 fits fold-local word and character TF-IDF models. E012 combines both sparse representations and reaches mean five-fold RMSE `104.4921`. It is weaker than E009 alone but has OOF error correlation `0.7253` with E009, so it is retained only as a candidate for controlled Step 11 ensemble testing. See `reports/text_model_comparison.md`.
+
 Step 7 compared raw squared-error training with a log target and absolute-error loss. Raw dollar price with squared-error loss remains selected because both alternatives increased total RMSE by underpredicting expensive listings. See `reports/target_strategy_comparison.md`.

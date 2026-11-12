@@ -1,0 +1,25 @@
+{
+  "experiment_id": "E012",
+  "name": "combined_word_character_tfidf_ridge",
+  "evaluated_at": "2026-11-11",
+  "model": "sklearn.linear_model.Ridge",
+  "text_fields": ["name", "summary", "description", "space", "neighborhood_overview", "house_rules", "host_about"],
+  "vectorizers": [
+    {"analyzer": "word", "ngram_range": [1, 2], "min_df": 3, "max_df": 0.98, "max_features": 50000, "sublinear_tf": true, "dtype": "float32"},
+    {"analyzer": "char_wb", "ngram_range": [3, 5], "min_df": 3, "max_features": 60000, "sublinear_tf": true, "dtype": "float32"}
+  ],
+  "parameters": {"alpha": 20.0, "solver": "lsqr"},
+  "validation": {"n_splits": 5, "random_state": 151, "metric": "RMSE in original price dollars", "vectorizer_fit_scope": "training fold only"},
+  "results": {
+    "fold_rmse": [99.88407349752849, 108.09748754051142, 99.93477611733243, 108.14736451306585, 106.39687895920167],
+    "mean_rmse": 104.49211612552797,
+    "std_rmse": 3.794497860821186,
+    "overall_oof_rmse": 104.56082561148098,
+    "feature_counts": [110000, 110000, 110000, 110000, 110000],
+    "runtime_seconds": 545.9384673999994,
+    "negative_predictions": 85
+  },
+  "complementarity_with_e009": {"error_correlation": 0.7252918375864434, "fold_error_correlations": [0.7185841351984775, 0.7515750947856694, 0.7223427734464711, 0.7449023197852972, 0.6856123819574428], "equal_weight_blend_oof_rmse": 89.12148183574983, "decision": "retain for controlled Step 11 weight testing; do not use 50/50 blend"},
+  "reproduction": {"fold_metrics_match": true, "feature_counts_match": true, "oof_sha256_match": true},
+  "local_artifacts": {"oof_sha256": "6261faa53800b074d379ac3d34c086ccb5f7d89737d6b075150cd0de79d465ec", "artifacts_are_git_ignored": true}
+}
