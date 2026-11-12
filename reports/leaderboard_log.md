@@ -34,3 +34,7 @@ The public leaderboard covers only 50% of the test set, so these results are sup
 - Rank 1 public score in the supplied snapshot: `75.08503`
 
 This is a point-in-time public rank. It can change as competitors submit, and the final course ranking uses the private half after the deadline.
+
+## E016 optimization update
+
+The user supplied a later Kaggle Submissions screenshot showing `E016_location_20261111.csv` complete with public RMSE `82.72167` and its selection checkbox enabled. Its local mean CV RMSE was `82.71944`, so public minus local is only `0.00223`. This close agreement strengthens confidence in the fixed local validation protocol. No rank was visible in the supplied E016 screenshot.

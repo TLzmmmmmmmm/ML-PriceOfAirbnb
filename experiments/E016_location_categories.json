@@ -79,5 +79,12 @@
     "prediction_max": 1145.2623102219156,
     "prediction_mean": 144.17175913297916,
     "submission_is_git_ignored": true
+  },
+  "public_leaderboard": {
+    "status": "Complete",
+    "score": 82.72167,
+    "public_minus_local_mean_cv": 0.002228343202743898,
+    "selected_in_supplied_screenshot": true,
+    "captured_at": "2026-11-11"
   }
 }
