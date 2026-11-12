@@ -63,4 +63,6 @@ Step 8 evaluates four compact feature groups as controlled ablations. Only text 
 
 Step 9 fits fold-local word and character TF-IDF models. E012 combines both sparse representations and reaches mean five-fold RMSE `104.4921`. It is weaker than E009 alone but has OOF error correlation `0.7253` with E009, so it is retained only as a candidate for controlled Step 11 ensemble testing. See `reports/text_model_comparison.md`.
 
+Step 10 parses the supplied amenities and learns frequent indicators inside each training fold. E014 adds amenity count plus 93 stable frequent indicators to E009 and improves mean five-fold RMSE from `87.1546` to `85.3451`, with gains in every fold. See `reports/amenities_ablation.md`.
+
 Step 7 compared raw squared-error training with a log target and absolute-error loss. Raw dollar price with squared-error loss remains selected because both alternatives increased total RMSE by underpredicting expensive listings. See `reports/target_strategy_comparison.md`.

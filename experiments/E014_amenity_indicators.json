@@ -1,0 +1,32 @@
+{
+  "experiment_id": "E014",
+  "name": "e009_plus_frequent_amenity_indicators",
+  "evaluated_at": "2026-11-11",
+  "baseline_experiment": "E009",
+  "model": "sklearn.ensemble.HistGradientBoostingRegressor",
+  "amenity_features": {
+    "count": true,
+    "frequent_indicators": true,
+    "normalization": "CSV parse, trim, Unicode casefold, deduplicate within row",
+    "minimum_training_fold_frequency": 0.01,
+    "maximum_indicators": 100,
+    "selected_indicators_per_fold": [93, 93, 93, 93, 93],
+    "indicator_intersection_across_folds": 93,
+    "indicator_union_across_folds": 93
+  },
+  "validation": {"n_splits": 5, "random_state": 151, "metric": "RMSE in original price dollars", "transformer_fit_scope": "training fold only"},
+  "results": {
+    "fold_rmse": [81.90097775400199, 89.65766331539416, 83.41075724049904, 89.46503705321476, 82.2912530945312],
+    "mean_rmse": 85.34513769152824,
+    "std_rmse": 3.478555002965619,
+    "overall_oof_rmse": 85.41596680052085,
+    "iterations": [227, 212, 462, 350, 294],
+    "total_feature_counts": [215, 215, 213, 213, 210],
+    "amenity_feature_counts": [94, 94, 94, 94, 94],
+    "runtime_seconds": 45.10308819999773,
+    "negative_predictions": 1
+  },
+  "comparison": {"mean_rmse_change_vs_e009": -1.80944603591696, "folds_improved": 5, "decision": "retain as new best tabular model"},
+  "reproduction": {"fold_metrics_match": true, "iterations_match": true, "selected_indicator_counts_match": true, "oof_sha256_match": true},
+  "local_artifacts": {"oof_sha256": "21d8e68257928cdec89670d07baf6f394e15fec3921075a357b4b8efec83a658", "artifacts_are_git_ignored": true}
+}

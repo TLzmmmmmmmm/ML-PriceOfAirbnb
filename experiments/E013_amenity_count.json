@@ -1,0 +1,22 @@
+{
+  "experiment_id": "E013",
+  "name": "e009_plus_amenity_count",
+  "evaluated_at": "2026-11-11",
+  "baseline_experiment": "E009",
+  "model": "sklearn.ensemble.HistGradientBoostingRegressor",
+  "amenity_features": {"count": true, "frequent_indicators": false, "row_duplicates_count_once": true},
+  "validation": {"n_splits": 5, "random_state": 151, "metric": "RMSE in original price dollars", "transformer_fit_scope": "training fold only"},
+  "results": {
+    "fold_rmse": [83.73413605706907, 90.44194457672899, 85.36847749415348, 92.12582093028298, 84.22693849156116],
+    "mean_rmse": 87.17946350995913,
+    "std_rmse": 3.434460366112037,
+    "overall_oof_rmse": 87.24702702231711,
+    "iterations": [191, 295, 277, 164, 367],
+    "total_feature_counts": [122, 122, 120, 120, 117],
+    "amenity_feature_counts": [1, 1, 1, 1, 1],
+    "runtime_seconds": 18.759240199997294,
+    "negative_predictions": 0
+  },
+  "comparison": {"mean_rmse_change_vs_e009": 0.02487978251393, "folds_improved": 2, "decision": "reject"},
+  "local_artifacts": {"oof_sha256": "dc24e5702367698a13c58d3efa2ecf5c38f43672ac8188b8c6e95f177439753b", "artifacts_are_git_ignored": true}
+}
