@@ -45,6 +45,21 @@ def _catboost_training_frame(rows=60):
         "10001",
         "10002",
     )
+    data["host_neighbourhood"] = np.where(
+        row_number % 2 == 0,
+        "Upper West Side",
+        "Williamsburg",
+    )
+    data["city"] = np.where(
+        row_number % 2 == 0,
+        "New York",
+        "Brooklyn",
+    )
+    data["host_location"] = np.where(
+        row_number % 2 == 0,
+        "New York, New York, United States",
+        "Brooklyn, New York, United States",
+    )
     data["id"] = row_number + 1000
     data["price"] = (
         50.0
@@ -149,3 +164,65 @@ def test_fit_full_e018_uses_all_rows_and_fixed_iterations(tmp_path):
     assert artifact["iterations"] == 20
     assert artifact["model"].tree_count_ == 20
     assert artifact_path.is_file()
+
+
+def test_prepare_e019_features_adds_only_approved_location_categories():
+    from src.amenities import AmenitiesTransformer
+    from src.preprocessing import MISSING_CATEGORY
+    from src.train_catboost import (
+        E019_ADDITIONAL_CATEGORICAL_COLUMNS,
+        E019_CATEGORICAL_COLUMNS,
+        prepare_e018_features,
+        prepare_e019_features,
+    )
+
+    training = _catboost_training_frame(rows=10)
+    training.loc[0, "host_neighbourhood"] = None
+    amenities = AmenitiesTransformer(
+        include_indicators=True,
+        min_frequency=0.1,
+        max_features=100,
+    ).fit(training["amenities"])
+
+    e018 = prepare_e018_features(training, amenities)
+    e019 = prepare_e019_features(training, amenities)
+
+    assert E019_ADDITIONAL_CATEGORICAL_COLUMNS == (
+        "host_neighbourhood",
+        "city",
+        "host_location",
+    )
+    assert len(E019_CATEGORICAL_COLUMNS) == 21
+    assert e019.shape[1] == e018.shape[1] + 3
+    assert not set(E019_ADDITIONAL_CATEGORICAL_COLUMNS).intersection(e018.columns)
+    assert set(E019_ADDITIONAL_CATEGORICAL_COLUMNS).issubset(e019.columns)
+    assert e019.loc[0, "host_neighbourhood"] == MISSING_CATEGORY
+    assert all(
+        e019[column].map(type).eq(str).all()
+        for column in E019_CATEGORICAL_COLUMNS
+    )
+
+
+def test_evaluate_e019_cv_uses_e019_categories_and_finite_oof(tmp_path):
+    import joblib
+
+    from src.train_catboost import (
+        E019_CATEGORICAL_COLUMNS,
+        evaluate_e019_cv,
+    )
+
+    frame = _catboost_training_frame()
+    folds = pd.Series(np.arange(len(frame)) % 3, index=frame.index, name="fold")
+
+    result = evaluate_e019_cv(
+        frame,
+        folds,
+        artifact_dir=tmp_path,
+        experiment_id="TEST_E019",
+    )
+    fold_zero = joblib.load(tmp_path / "TEST_E019_fold_0.joblib")
+
+    assert result["oof_predictions"].shape == (len(frame),)
+    assert np.isfinite(result["oof_predictions"]).all()
+    assert result["feature_counts"] == [55, 55, 55]
+    assert fold_zero["categorical_columns"] == E019_CATEGORICAL_COLUMNS

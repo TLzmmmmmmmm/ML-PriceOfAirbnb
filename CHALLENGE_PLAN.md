@@ -65,6 +65,8 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | E017 | Complete | A fixed 90% E016 / 10% E012 blend improved all five folds, reduced mean RMSE to `82.3433`, and produced a validated local submission without upload |
 | E018 | Complete | CatBoost on the same source fields reached mean RMSE `82.4159` but improved only 3/5 folds and missed the predefined replacement gate; rejected for direct submission |
 | E018 submission | Complete | User-requested diagnostic CatBoost model trained on all rows for 1,817 trees; validated 17,337-row `E018_catboost_20261112.csv` generated locally without upload |
+| E019 | Complete | Adding `host_neighbourhood`, `city`, and `host_location` worsened CatBoost mean RMSE to `82.4939`, improved only 2/5 folds, and was rejected |
+| E020 | Skipped | Conditional E017/E019 blend not run because E019 was worse and its error correlation with E017 was `0.9584`, above the predefined complementarity threshold |
 
 ## Step 1: Audit files, data, and rules
 

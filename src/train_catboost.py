@@ -22,17 +22,31 @@ CATBOOST_CATEGORICAL_COLUMNS = (
     *LOW_CARDINALITY_CATEGORICAL_COLUMNS,
     *LOCATION_CATEGORICAL_COLUMNS,
 )
+E019_ADDITIONAL_CATEGORICAL_COLUMNS = (
+    "host_neighbourhood",
+    "city",
+    "host_location",
+)
+E019_CATEGORICAL_COLUMNS = (
+    *CATBOOST_CATEGORICAL_COLUMNS,
+    *E019_ADDITIONAL_CATEGORICAL_COLUMNS,
+)
 
 
-def prepare_e018_features(
+def _prepare_catboost_features(
     frame: pd.DataFrame,
     amenities_transformer: AmenitiesTransformer,
+    categorical_columns: tuple[str, ...],
 ) -> pd.DataFrame:
-    """Build CatBoost-native E016 features with a fitted amenity vocabulary."""
+    extra_categorical_columns = tuple(
+        column
+        for column in categorical_columns
+        if column not in LOW_CARDINALITY_CATEGORICAL_COLUMNS
+    )
     structured = prepare_structured_frame(
         frame,
         feature_groups=("text_structure",),
-        extra_categorical_columns=LOCATION_CATEGORICAL_COLUMNS,
+        extra_categorical_columns=extra_categorical_columns,
     )
     amenities = pd.DataFrame(
         amenities_transformer.transform(frame["amenities"]),
@@ -40,9 +54,33 @@ def prepare_e018_features(
         index=frame.index,
     )
     result = pd.concat([structured, amenities], axis=1)
-    for column in CATBOOST_CATEGORICAL_COLUMNS:
+    for column in categorical_columns:
         result[column] = result[column].map(str)
     return result
+
+
+def prepare_e018_features(
+    frame: pd.DataFrame,
+    amenities_transformer: AmenitiesTransformer,
+) -> pd.DataFrame:
+    """Build CatBoost-native E016 features with a fitted amenity vocabulary."""
+    return _prepare_catboost_features(
+        frame,
+        amenities_transformer,
+        CATBOOST_CATEGORICAL_COLUMNS,
+    )
+
+
+def prepare_e019_features(
+    frame: pd.DataFrame,
+    amenities_transformer: AmenitiesTransformer,
+) -> pd.DataFrame:
+    """Add the three approved E019 location categories to E018 features."""
+    return _prepare_catboost_features(
+        frame,
+        amenities_transformer,
+        E019_CATEGORICAL_COLUMNS,
+    )
 
 
 def build_e018_model(*, iterations: int = 2000) -> CatBoostRegressor:
@@ -105,14 +143,15 @@ def fit_full_e018(
     }
 
 
-def evaluate_e018_cv(
+def _evaluate_catboost_cv(
     frame: pd.DataFrame,
     folds: pd.Series,
     *,
     artifact_dir: str | Path,
-    experiment_id: str = "E018",
+    experiment_id: str,
+    categorical_columns: tuple[str, ...],
 ) -> dict[str, object]:
-    """Run fixed outer-fold CatBoost CV with internal early stopping."""
+    """Run fixed outer-fold CatBoost CV for an explicit category set."""
     artifact_dir = Path(artifact_dir)
     artifact_dir.mkdir(parents=True, exist_ok=True)
     folds = folds.reindex(frame.index)
@@ -134,8 +173,16 @@ def evaluate_e018_cv(
             min_frequency=0.01,
             max_features=100,
         ).fit(training_frame["amenities"])
-        training_features = prepare_e018_features(training_frame, amenities)
-        validation_features = prepare_e018_features(validation_frame, amenities)
+        training_features = _prepare_catboost_features(
+            training_frame,
+            amenities,
+            categorical_columns,
+        )
+        validation_features = _prepare_catboost_features(
+            validation_frame,
+            amenities,
+            categorical_columns,
+        )
         training_target = training_frame["price"].to_numpy(dtype=float)
         inner_training, inner_validation = train_test_split(
             np.arange(len(training_frame)),
@@ -147,7 +194,7 @@ def evaluate_e018_cv(
         model.fit(
             training_features.iloc[inner_training],
             training_target[inner_training],
-            cat_features=list(CATBOOST_CATEGORICAL_COLUMNS),
+            cat_features=list(categorical_columns),
             eval_set=(
                 training_features.iloc[inner_validation],
                 training_target[inner_validation],
@@ -166,7 +213,7 @@ def evaluate_e018_cv(
         joblib.dump(
             {
                 "amenities_transformer": amenities,
-                "categorical_columns": CATBOOST_CATEGORICAL_COLUMNS,
+                "categorical_columns": categorical_columns,
                 "model": model,
                 "fold": int(fold),
             },
@@ -190,3 +237,37 @@ def evaluate_e018_cv(
         "negative_predictions": int((oof_predictions < 0).sum()),
         "oof_predictions": oof_predictions,
     }
+
+
+def evaluate_e018_cv(
+    frame: pd.DataFrame,
+    folds: pd.Series,
+    *,
+    artifact_dir: str | Path,
+    experiment_id: str = "E018",
+) -> dict[str, object]:
+    """Run the fixed E018 CatBoost cross-validation configuration."""
+    return _evaluate_catboost_cv(
+        frame,
+        folds,
+        artifact_dir=artifact_dir,
+        experiment_id=experiment_id,
+        categorical_columns=CATBOOST_CATEGORICAL_COLUMNS,
+    )
+
+
+def evaluate_e019_cv(
+    frame: pd.DataFrame,
+    folds: pd.Series,
+    *,
+    artifact_dir: str | Path,
+    experiment_id: str = "E019",
+) -> dict[str, object]:
+    """Run E018 CV with the three approved E019 location categories."""
+    return _evaluate_catboost_cv(
+        frame,
+        folds,
+        artifact_dir=artifact_dir,
+        experiment_id=experiment_id,
+        categorical_columns=E019_CATEGORICAL_COLUMNS,
+    )

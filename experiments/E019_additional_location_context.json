@@ -1,0 +1,79 @@
+{
+  "experiment_id": "E019",
+  "name": "catboost_additional_location_context",
+  "evaluated_at": "2026-11-12",
+  "baseline_experiment": "E018",
+  "model": "catboost.CatBoostRegressor",
+  "change_under_test": {
+    "additional_categorical_columns": [
+      "host_neighbourhood",
+      "city",
+      "host_location"
+    ],
+    "unchanged_components": "E018 features, amenities, model parameters, outer folds, and internal early stopping"
+  },
+  "features": {
+    "native_categorical_columns": 21,
+    "amenity_features_per_fold": [94, 94, 94, 94, 94],
+    "total_features_per_fold": [145, 145, 145, 145, 145]
+  },
+  "validation": {
+    "outer_splits": 5,
+    "outer_random_state": 151,
+    "inner_validation_fraction": 0.1,
+    "inner_random_state": 151,
+    "metric": "RMSE in original price dollars",
+    "retention_gate": "mean improvement vs E018 >= 0.3, at least 4/5 folds improved, and no material dispersion increase"
+  },
+  "results": {
+    "fold_rmse": [
+      78.17903287730545,
+      87.58134505965842,
+      80.64556459856769,
+      86.89257214529185,
+      79.1708082967914
+    ],
+    "mean_rmse": 82.49386459552296,
+    "std_rmse": 3.9574682407108206,
+    "overall_oof_rmse": 82.58870374921807,
+    "best_iterations": [1596, 874, 1991, 1992, 1997],
+    "runtime_seconds": 1181.8906632,
+    "negative_predictions": 0
+  },
+  "comparison_with_e018": {
+    "e018_mean_rmse": 82.41585988973627,
+    "mean_rmse_improvement": -0.07800470578669091,
+    "fold_improvements": [
+      -0.09316277860996536,
+      -0.3035969229152897,
+      -0.21514847925759284,
+      0.03395758103189905,
+      0.18792707081749427
+    ],
+    "folds_improved": 2,
+    "prediction_correlation": 0.995935011675827,
+    "error_correlation": 0.9938061384481494
+  },
+  "comparison_with_e017": {
+    "e017_mean_rmse": 82.34330882962549,
+    "mean_rmse_improvement": -0.15055576589747943,
+    "folds_improved": 2,
+    "prediction_correlation": 0.9723926216575576,
+    "error_correlation": 0.9583923107010119
+  },
+  "decision": {
+    "e019": "reject additional location context",
+    "e020": "skip conditional blend because E019 is worse and error correlation with E017 exceeds 0.95"
+  },
+  "local_artifacts": {
+    "oof_rows": 33538,
+    "oof_all_finite": true,
+    "oof_sha256": "12cdf5d47aa74e70ce252ea1d9ea5b24df235a8ae0a9c7303beda409b0548bd3",
+    "fold_model_count": 5,
+    "artifacts_are_git_ignored": true
+  },
+  "submission": {
+    "generated": false,
+    "uploaded": false
+  }
+}
