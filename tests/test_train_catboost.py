@@ -122,3 +122,30 @@ def test_evaluate_e018_cv_produces_finite_oof_and_fold_artifacts(tmp_path):
         np.load(tmp_path / "TEST_E018_oof_predictions.npy"),
         result["oof_predictions"],
     )
+
+
+def test_fit_full_e018_uses_all_rows_and_fixed_iterations(tmp_path):
+    import joblib
+
+    from src.train_catboost import fit_full_e018
+
+    training = _catboost_training_frame()
+    test = _catboost_training_frame(rows=12).drop(columns="price")
+    artifact_path = tmp_path / "E018_full.joblib"
+
+    result = fit_full_e018(
+        training,
+        test,
+        artifact_path=artifact_path,
+        iterations=20,
+    )
+    artifact = joblib.load(artifact_path)
+
+    assert result["predictions"].shape == (len(test),)
+    assert np.isfinite(result["predictions"]).all()
+    assert result["training_rows"] == len(training)
+    assert result["iterations"] == 20
+    assert result["feature_count"] > result["amenity_feature_count"]
+    assert artifact["iterations"] == 20
+    assert artifact["model"].tree_count_ == 20
+    assert artifact_path.is_file()

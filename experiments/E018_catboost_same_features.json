@@ -77,8 +77,31 @@
     "fold_model_count": 5,
     "artifacts_are_git_ignored": true
   },
+  "full_training": {
+    "training_rows": 33538,
+    "iteration_policy": "median of outer-CV best iterations",
+    "iterations": 1817,
+    "uses_all_training_rows": true,
+    "feature_count": 142,
+    "amenity_feature_count": 94,
+    "model_file": "models/E018_full.joblib",
+    "model_sha256": "78a234230ca29ba6398403ed453934f46cdfdff507c8e5b4e9f7d78459ba0508",
+    "model_is_git_ignored": true
+  },
   "submission": {
-    "generated": false,
-    "uploaded": false
+    "generated": true,
+    "uploaded": false,
+    "purpose": "diagnostic; E018 did not pass its direct-replacement gate",
+    "file": "submissions/E018_catboost_20261112.csv",
+    "rows": 17337,
+    "sha256": "ae950935daf988fa94297b4b0878f27a34f0447cc6a011fd64fd90f565167b79",
+    "clipped_negative_predictions": 0,
+    "duplicate_ids": 0,
+    "nonfinite_predictions": 0,
+    "negative_predictions": 0,
+    "prediction_min": 10.049734819111393,
+    "prediction_max": 1121.4232047730316,
+    "prediction_mean": 144.01973379709185,
+    "submission_is_git_ignored": true
   }
 }

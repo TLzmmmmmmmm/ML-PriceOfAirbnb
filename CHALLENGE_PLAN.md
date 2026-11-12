@@ -64,6 +64,7 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | E016 submission | Complete | Full-data model trained with 807 features and 471 iterations; validated 17,337-row `E016_location_20261111.csv` generated locally without upload |
 | E017 | Complete | A fixed 90% E016 / 10% E012 blend improved all five folds, reduced mean RMSE to `82.3433`, and produced a validated local submission without upload |
 | E018 | Complete | CatBoost on the same source fields reached mean RMSE `82.4159` but improved only 3/5 folds and missed the predefined replacement gate; rejected for direct submission |
+| E018 submission | Complete | User-requested diagnostic CatBoost model trained on all rows for 1,817 trees; validated 17,337-row `E018_catboost_20261112.csv` generated locally without upload |
 
 ## Step 1: Audit files, data, and rules
 

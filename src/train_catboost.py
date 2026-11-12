@@ -45,12 +45,12 @@ def prepare_e018_features(
     return result
 
 
-def build_e018_model() -> CatBoostRegressor:
+def build_e018_model(*, iterations: int = 2000) -> CatBoostRegressor:
     """Return the fixed E018 CatBoost regression configuration."""
     return CatBoostRegressor(
         loss_function="RMSE",
         eval_metric="RMSE",
-        iterations=2000,
+        iterations=iterations,
         learning_rate=0.03,
         depth=8,
         l2_leaf_reg=5.0,
@@ -60,6 +60,49 @@ def build_e018_model() -> CatBoostRegressor:
         allow_writing_files=False,
         verbose=False,
     )
+
+
+def fit_full_e018(
+    training: pd.DataFrame,
+    test: pd.DataFrame,
+    *,
+    artifact_path: str | Path,
+    iterations: int,
+) -> dict[str, object]:
+    """Fit E018 on every training row with a fixed tree count."""
+    artifact_path = Path(artifact_path)
+    artifact_path.parent.mkdir(parents=True, exist_ok=True)
+    amenities = AmenitiesTransformer(
+        include_indicators=True,
+        min_frequency=0.01,
+        max_features=100,
+    ).fit(training["amenities"])
+    training_features = prepare_e018_features(training, amenities)
+    test_features = prepare_e018_features(test, amenities)
+    model = build_e018_model(iterations=iterations)
+    model.fit(
+        training_features,
+        training["price"].to_numpy(dtype=float),
+        cat_features=list(CATBOOST_CATEGORICAL_COLUMNS),
+        verbose=False,
+    )
+    predictions = model.predict(test_features)
+    joblib.dump(
+        {
+            "amenities_transformer": amenities,
+            "categorical_columns": CATBOOST_CATEGORICAL_COLUMNS,
+            "iterations": iterations,
+            "model": model,
+        },
+        artifact_path,
+    )
+    return {
+        "predictions": predictions,
+        "training_rows": len(training),
+        "iterations": int(model.tree_count_),
+        "feature_count": training_features.shape[1],
+        "amenity_feature_count": len(amenities.get_feature_names_out()),
+    }
 
 
 def evaluate_e018_cv(
