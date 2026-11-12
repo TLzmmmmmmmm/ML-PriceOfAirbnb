@@ -34,6 +34,7 @@ def evaluate_e003_cv(
     *,
     artifact_dir: str | Path,
     experiment_id: str = "E003",
+    feature_groups: tuple[str, ...] = (),
 ) -> dict[str, object]:
     """Run fixed-fold CV, save fold models, and return OOF metrics."""
     artifact_dir = Path(artifact_dir)
@@ -50,7 +51,7 @@ def evaluate_e003_cv(
         training_frame = frame.loc[~validation_mask]
         validation_frame = frame.loc[validation_mask]
 
-        preprocessor = StructuredPreprocessor()
+        preprocessor = StructuredPreprocessor(feature_groups=feature_groups)
         training_matrix = preprocessor.fit_transform(training_frame)
         validation_matrix = preprocessor.transform(validation_frame)
         model = build_e003_model()
@@ -80,6 +81,7 @@ def evaluate_e003_cv(
         "std_rmse": float(np.std(fold_scores)),
         "iterations": iterations,
         "feature_counts": feature_counts,
+        "feature_groups": list(feature_groups),
         "runtime_seconds": perf_counter() - started,
         "oof_predictions": oof_predictions,
     }

@@ -1,0 +1,21 @@
+{
+  "experiment_id": "E006",
+  "name": "date_relation_features",
+  "evaluated_at": "2026-11-11",
+  "baseline_experiment": "E003",
+  "model": "sklearn.ensemble.HistGradientBoostingRegressor",
+  "feature_groups": ["date_relations"],
+  "features_added": ["review_history_days", "host_to_first_review_days"],
+  "validation": {"n_splits": 5, "random_state": 151, "metric": "RMSE in original price dollars"},
+  "results": {
+    "fold_rmse": [83.8471248359138, 90.62804420510366, 85.75384418041472, 92.60662630717823, 84.22332315243399],
+    "mean_rmse": 87.41179253620888,
+    "std_rmse": 3.5483110991272877,
+    "overall_oof_rmse": 87.48371945976004,
+    "iterations": [197, 215, 370, 248, 278],
+    "feature_counts": [116, 116, 114, 114, 111],
+    "runtime_seconds": 15.031743899999128
+  },
+  "comparison": {"mean_rmse_change_vs_e003": 0.12484299263193, "folds_improved": 1, "decision": "reject"},
+  "local_artifacts": {"oof_sha256": "ec8e1a77c5ef3efb9cb0cbcd863046e6a6b79deff5e23b1b3b8faf8f966610f3", "artifacts_are_git_ignored": true}
+}

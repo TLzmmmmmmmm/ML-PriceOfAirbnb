@@ -92,6 +92,34 @@ EXCLUDED_COLUMNS = (
 DATE_ORIGIN = pd.Timestamp("2000-01-01")
 MISSING_CATEGORY = "__MISSING__"
 
+ENGINEERED_FEATURE_GROUPS = {
+    "date_relations": (
+        "review_history_days",
+        "host_to_first_review_days",
+    ),
+    "capacity_ratios": (
+        "accommodates_per_bedroom",
+        "accommodates_per_bed",
+        "beds_per_bedroom",
+        "bathrooms_per_accommodate",
+    ),
+    "host_scale": (
+        "host_listing_count_difference",
+        "calculated_to_host_listings_ratio",
+    ),
+    "text_structure": (
+        "name_length",
+        "summary_length",
+        "description_length",
+        "name_missing",
+        "summary_missing",
+        "description_missing",
+        "row_missing_count",
+    ),
+}
+
+TEXT_STRUCTURE_COLUMNS = ("name", "summary", "description")
+
 
 def parse_currency(values: pd.Series) -> pd.Series:
     """Convert currency strings such as '$1,234.50' to floating-point values."""
@@ -111,8 +139,76 @@ def parse_date_days(values: pd.Series) -> pd.Series:
     return (parsed - DATE_ORIGIN).dt.days.astype(float)
 
 
-def prepare_structured_frame(frame: pd.DataFrame) -> pd.DataFrame:
+def _safe_ratio(numerator: pd.Series, denominator: pd.Series) -> pd.Series:
+    numerator = pd.to_numeric(numerator, errors="coerce")
+    denominator = pd.to_numeric(denominator, errors="coerce").replace(0, np.nan)
+    return (numerator / denominator).astype(float)
+
+
+def add_engineered_features(
+    frame: pd.DataFrame,
+    feature_groups: tuple[str, ...],
+) -> pd.DataFrame:
+    """Return a copy with the requested stateless feature groups added."""
+    unknown_groups = set(feature_groups) - ENGINEERED_FEATURE_GROUPS.keys()
+    if unknown_groups:
+        raise ValueError(f"Unknown feature groups: {sorted(unknown_groups)}")
+
+    result = frame.copy()
+    if "date_relations" in feature_groups:
+        host_since = pd.to_datetime(frame["host_since"], errors="coerce")
+        first_review = pd.to_datetime(frame["first_review"], errors="coerce")
+        last_review = pd.to_datetime(frame["last_review"], errors="coerce")
+        result["review_history_days"] = (last_review - first_review).dt.days.astype(float)
+        result["host_to_first_review_days"] = (
+            first_review - host_since
+        ).dt.days.astype(float)
+
+    if "capacity_ratios" in feature_groups:
+        result["accommodates_per_bedroom"] = _safe_ratio(
+            frame["accommodates"], frame["bedrooms"]
+        )
+        result["accommodates_per_bed"] = _safe_ratio(
+            frame["accommodates"], frame["beds"]
+        )
+        result["beds_per_bedroom"] = _safe_ratio(
+            frame["beds"], frame["bedrooms"]
+        )
+        result["bathrooms_per_accommodate"] = _safe_ratio(
+            frame["bathrooms"], frame["accommodates"]
+        )
+
+    if "host_scale" in feature_groups:
+        host_count = pd.to_numeric(frame["host_listings_count"], errors="coerce")
+        calculated_count = pd.to_numeric(
+            frame["calculated_host_listings_count"], errors="coerce"
+        )
+        result["host_listing_count_difference"] = host_count - calculated_count
+        result["calculated_to_host_listings_ratio"] = _safe_ratio(
+            calculated_count, host_count
+        )
+
+    if "text_structure" in feature_groups:
+        missing_columns = []
+        for column in TEXT_STRUCTURE_COLUMNS:
+            text = frame[column].astype("string")
+            missing = text.isna() | text.str.strip().eq("")
+            result[f"{column}_length"] = text.fillna("").str.len().astype(float)
+            result[f"{column}_missing"] = missing.astype(float)
+            missing_columns.append(missing)
+        result["row_missing_count"] = pd.concat(missing_columns, axis=1).sum(
+            axis=1
+        ).astype(float)
+
+    return result
+
+
+def prepare_structured_frame(
+    frame: pd.DataFrame,
+    feature_groups: tuple[str, ...] = (),
+) -> pd.DataFrame:
     """Apply stateless parsing and select the structured feature groups."""
+    source = add_engineered_features(frame, feature_groups)
     prepared = pd.DataFrame(index=frame.index)
 
     for column in NUMERIC_COLUMNS:
@@ -127,6 +223,9 @@ def prepare_structured_frame(frame: pd.DataFrame) -> pd.DataFrame:
         prepared[column] = (
             frame[column].astype("string").fillna(MISSING_CATEGORY).astype(object)
         )
+    for group in feature_groups:
+        for column in ENGINEERED_FEATURE_GROUPS[group]:
+            prepared[column] = source[column]
 
     return prepared
 
@@ -134,13 +233,21 @@ def prepare_structured_frame(frame: pd.DataFrame) -> pd.DataFrame:
 class StructuredPreprocessor(BaseEstimator, TransformerMixin):
     """Fit train-only imputers and encoders for structured listing features."""
 
+    def __init__(self, feature_groups: tuple[str, ...] = ()):
+        self.feature_groups = feature_groups
+
     def fit(self, frame: pd.DataFrame, y: object = None) -> "StructuredPreprocessor":
-        prepared = prepare_structured_frame(frame)
+        prepared = prepare_structured_frame(frame, self.feature_groups)
         numeric_features = (
             *NUMERIC_COLUMNS,
             *CURRENCY_COLUMNS,
             *PERCENTAGE_COLUMNS,
             *(f"{column}_days" for column in DATE_COLUMNS),
+            *(
+                column
+                for group in self.feature_groups
+                for column in ENGINEERED_FEATURE_GROUPS[group]
+            ),
         )
         self.transformer_ = ColumnTransformer(
             transformers=[
@@ -178,7 +285,9 @@ class StructuredPreprocessor(BaseEstimator, TransformerMixin):
 
     def transform(self, frame: pd.DataFrame) -> np.ndarray:
         check_is_fitted(self, "transformer_")
-        return self.transformer_.transform(prepare_structured_frame(frame))
+        return self.transformer_.transform(
+            prepare_structured_frame(frame, self.feature_groups)
+        )
 
     def get_feature_names_out(self) -> np.ndarray:
         check_is_fitted(self, "transformer_")

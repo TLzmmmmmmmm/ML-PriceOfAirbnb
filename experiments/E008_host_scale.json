@@ -1,0 +1,21 @@
+{
+  "experiment_id": "E008",
+  "name": "host_scale_features",
+  "evaluated_at": "2026-11-11",
+  "baseline_experiment": "E003",
+  "model": "sklearn.ensemble.HistGradientBoostingRegressor",
+  "feature_groups": ["host_scale"],
+  "features_added": ["host_listing_count_difference", "calculated_to_host_listings_ratio"],
+  "validation": {"n_splits": 5, "random_state": 151, "metric": "RMSE in original price dollars"},
+  "results": {
+    "fold_rmse": [84.07202509807786, 90.48824957784778, 85.73540776079076, 91.83503407194277, 84.53916142054162],
+    "mean_rmse": 87.33397558584018,
+    "std_rmse": 3.200490531353633,
+    "overall_oof_rmse": 87.39254727324462,
+    "iterations": [322, 196, 397, 323, 248],
+    "feature_counts": [116, 116, 114, 114, 111],
+    "runtime_seconds": 14.826832400000058
+  },
+  "comparison": {"mean_rmse_change_vs_e003": 0.04702604226323, "folds_improved": 1, "decision": "reject"},
+  "local_artifacts": {"oof_sha256": "5f829bde4bfc7cff94f29032afe207b1668fd65b3a75ce62213b8713e7b11ce7", "artifacts_are_git_ignored": true}
+}

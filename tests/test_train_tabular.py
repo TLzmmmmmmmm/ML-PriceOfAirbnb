@@ -80,3 +80,22 @@ def test_cross_validation_produces_complete_oof_predictions_and_artifacts(tmp_pa
     ]
     saved_oof = np.load(tmp_path / "TEST_oof_predictions.npy")
     np.testing.assert_allclose(saved_oof, result["oof_predictions"])
+
+
+def test_cross_validation_records_and_uses_engineered_feature_groups(tmp_path):
+    from src.train_tabular import evaluate_e003_cv
+
+    frame = _training_frame()
+    folds = pd.Series(np.arange(len(frame)) % 3, index=frame.index, name="fold")
+
+    result = evaluate_e003_cv(
+        frame,
+        folds,
+        artifact_dir=tmp_path,
+        experiment_id="TEST_FEATURES",
+        feature_groups=("capacity_ratios",),
+    )
+
+    assert result["feature_groups"] == ["capacity_ratios"]
+    assert len(set(result["feature_counts"])) == 1
+    assert result["feature_counts"][0] > 4

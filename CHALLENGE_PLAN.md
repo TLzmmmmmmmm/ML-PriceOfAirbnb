@@ -47,7 +47,8 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | 5 | Complete | Leakage-safe structured preprocessor implemented; all 65 columns assigned to documented groups |
 | 6 | Complete | E003 structured histogram gradient boosting reached mean five-fold RMSE `87.2869` |
 | 7 | Complete | Raw price with squared-error loss retained after E004/E005 long-tail comparison |
-| 8–15 | Not started | Must follow the confirmation rule before execution |
+| 8 | Complete | E009 text-structure features improved mean five-fold RMSE to `87.1546`; three other groups rejected |
+| 9–15 | Not started | Must follow the confirmation rule before execution |
 
 ## Step 1: Audit files, data, and rules
 

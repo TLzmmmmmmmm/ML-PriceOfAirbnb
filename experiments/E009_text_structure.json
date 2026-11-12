@@ -1,0 +1,22 @@
+{
+  "experiment_id": "E009",
+  "name": "text_structure_features",
+  "evaluated_at": "2026-11-11",
+  "baseline_experiment": "E003",
+  "model": "sklearn.ensemble.HistGradientBoostingRegressor",
+  "feature_groups": ["text_structure"],
+  "features_added": ["name_length", "summary_length", "description_length", "name_missing", "summary_missing", "description_missing", "row_missing_count"],
+  "validation": {"n_splits": 5, "random_state": 151, "metric": "RMSE in original price dollars"},
+  "results": {
+    "fold_rmse": [83.84056657111904, 90.05743169921527, 85.35456028360034, 92.46778964868338, 84.05257043460799],
+    "mean_rmse": 87.1545837274452,
+    "std_rmse": 3.4785618892997747,
+    "overall_oof_rmse": 87.22390703295918,
+    "iterations": [209, 288, 412, 179, 257],
+    "feature_counts": [121, 121, 119, 119, 116],
+    "runtime_seconds": 15.244603400000415
+  },
+  "comparison": {"mean_rmse_change_vs_e003": -0.13236581613175, "folds_improved": 3, "decision": "retain"},
+  "reproduction": {"metrics_match": true, "oof_sha256_match": true},
+  "local_artifacts": {"oof_sha256": "6598730007d77121f93be589566c2466bfaab8492fea774565996ea3ce6e184d", "artifacts_are_git_ignored": true}
+}

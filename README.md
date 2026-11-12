@@ -59,4 +59,6 @@ The complete field grouping and exclusion rationale are recorded in `reports/fea
 
 E003 trains histogram gradient boosting on the structured feature matrix. Its mean five-fold RMSE is `87.2869`, compared with `111.9119` for the official linear baseline. The configuration and fold results are recorded in `experiments/E003_hist_gradient_boosting.json` and `reports/first_tabular_model.md`.
 
+Step 8 evaluates four compact feature groups as controlled ablations. Only text length and missingness indicators are retained: E009 reaches mean five-fold RMSE `87.1546`, while date relations, capacity ratios, and host-scale features are rejected. Definitions and per-fold results are recorded in `reports/feature_engineering_ablation.md`.
+
 Step 7 compared raw squared-error training with a log target and absolute-error loss. Raw dollar price with squared-error loss remains selected because both alternatives increased total RMSE by underpredicting expensive listings. See `reports/target_strategy_comparison.md`.

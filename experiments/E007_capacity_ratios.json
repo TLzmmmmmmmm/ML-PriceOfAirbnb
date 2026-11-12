@@ -1,0 +1,21 @@
+{
+  "experiment_id": "E007",
+  "name": "capacity_ratio_features",
+  "evaluated_at": "2026-11-11",
+  "baseline_experiment": "E003",
+  "model": "sklearn.ensemble.HistGradientBoostingRegressor",
+  "feature_groups": ["capacity_ratios"],
+  "features_added": ["accommodates_per_bedroom", "accommodates_per_bed", "beds_per_bedroom", "bathrooms_per_accommodate"],
+  "validation": {"n_splits": 5, "random_state": 151, "metric": "RMSE in original price dollars"},
+  "results": {
+    "fold_rmse": [83.93389139359748, 90.50083268047838, 85.9574124557142, 92.20719352309708, 84.5543950963634],
+    "mean_rmse": 87.4307450298501,
+    "std_rmse": 3.313969871873722,
+    "overall_oof_rmse": 87.49347057907016,
+    "iterations": [204, 236, 311, 265, 222],
+    "feature_counts": [118, 118, 116, 116, 113],
+    "runtime_seconds": 13.73423719999846
+  },
+  "comparison": {"mean_rmse_change_vs_e003": 0.14379548627315, "folds_improved": 0, "decision": "reject"},
+  "local_artifacts": {"oof_sha256": "0558ff16474021d9096b893b945f40ed353824a0edda72ffe2da5d26014a8733", "artifacts_are_git_ignored": true}
+}

@@ -104,3 +104,91 @@ def test_preprocessing_excludes_deferred_fields_and_does_not_mutate_input():
     assert not any("description" in name for name in output_names)
     assert not any("host_acceptance_rate" in name for name in output_names)
     assert not any("square_feet" in name for name in output_names)
+
+
+def test_date_relation_features_use_only_dates_from_the_same_row():
+    from src.preprocessing import add_engineered_features
+
+    frame = _structured_frame(rows=2)
+    frame["host_since"] = ["2018-01-01", None]
+    frame["first_review"] = ["2018-01-11", "2018-02-01"]
+    frame["last_review"] = ["2018-01-31", "2018-03-01"]
+
+    result = add_engineered_features(frame, ("date_relations",))
+
+    assert result["review_history_days"].tolist() == [20.0, 28.0]
+    assert result.loc[0, "host_to_first_review_days"] == 10.0
+    assert np.isnan(result.loc[1, "host_to_first_review_days"])
+
+
+def test_capacity_ratio_features_replace_zero_denominators_with_missing():
+    from src.preprocessing import add_engineered_features
+
+    frame = _structured_frame(rows=2)
+    frame["accommodates"] = [4.0, 2.0]
+    frame["bedrooms"] = [2.0, 0.0]
+    frame["beds"] = [1.0, 0.0]
+    frame["bathrooms"] = [1.0, 1.0]
+
+    result = add_engineered_features(frame, ("capacity_ratios",))
+
+    assert result.loc[0, "accommodates_per_bedroom"] == 2.0
+    assert result.loc[0, "accommodates_per_bed"] == 4.0
+    assert result.loc[0, "beds_per_bedroom"] == 0.5
+    assert result.loc[0, "bathrooms_per_accommodate"] == 0.25
+    assert result.loc[1, [
+        "accommodates_per_bedroom",
+        "accommodates_per_bed",
+        "beds_per_bedroom",
+    ]].isna().all()
+
+
+def test_host_scale_features_capture_count_difference_and_ratio():
+    from src.preprocessing import add_engineered_features
+
+    frame = _structured_frame(rows=2)
+    frame["host_listings_count"] = [10.0, 0.0]
+    frame["calculated_host_listings_count"] = [4.0, 2.0]
+
+    result = add_engineered_features(frame, ("host_scale",))
+
+    assert result["host_listing_count_difference"].tolist() == [6.0, -2.0]
+    assert result.loc[0, "calculated_to_host_listings_ratio"] == 0.4
+    assert np.isnan(result.loc[1, "calculated_to_host_listings_ratio"])
+
+
+def test_text_structure_features_measure_length_presence_and_row_missingness():
+    from src.preprocessing import add_engineered_features
+
+    frame = _structured_frame(rows=2)
+    frame["name"] = ["Loft", None]
+    frame["description"] = ["abc def", ""]
+    frame["summary"] = [None, "Room"]
+
+    result = add_engineered_features(frame, ("text_structure",))
+
+    assert result["name_length"].tolist() == [4.0, 0.0]
+    assert result["description_length"].tolist() == [7.0, 0.0]
+    assert result["summary_length"].tolist() == [0.0, 4.0]
+    assert result["name_missing"].tolist() == [0.0, 1.0]
+    assert result["description_missing"].tolist() == [0.0, 1.0]
+    assert result["summary_missing"].tolist() == [1.0, 0.0]
+    assert result["row_missing_count"].tolist() == [1.0, 2.0]
+
+
+def test_structured_preprocessor_includes_only_requested_engineered_group():
+    from src.preprocessing import StructuredPreprocessor
+
+    training = _structured_frame()
+    training["name"] = ["a", "bb", "ccc"]
+    training["summary"] = ["x", None, "z"]
+
+    preprocessor = StructuredPreprocessor(
+        feature_groups=("text_structure",)
+    ).fit(training)
+    names = preprocessor.get_feature_names_out().tolist()
+
+    assert "name_length" in names
+    assert "summary_missing" in names
+    assert "row_missing_count" in names
+    assert "review_history_days" not in names
