@@ -1,0 +1,63 @@
+{
+  "experiment_id": "E016",
+  "name": "e014_plus_location_categories",
+  "evaluated_at": "2026-11-11",
+  "baseline_experiment": "E014",
+  "model": "sklearn.ensemble.HistGradientBoostingRegressor",
+  "change_under_test": {
+    "extra_categorical_columns": [
+      "neighbourhood_cleansed",
+      "zipcode"
+    ],
+    "encoding": "fold-trained one-hot with unknown categories ignored",
+    "unchanged_components": "E014 structured text features, amenity count, frequent amenity indicators, HGB parameters, and folds"
+  },
+  "validation": {
+    "n_splits": 5,
+    "random_state": 151,
+    "metric": "RMSE in original price dollars",
+    "transformer_fit_scope": "training fold only"
+  },
+  "results": {
+    "fold_rmse": [
+      78.8869616118674,
+      86.39002638769358,
+      81.64546892127906,
+      87.33866200231212,
+      79.33608936083414
+    ],
+    "mean_rmse": 82.71944165679726,
+    "std_rmse": 3.5241674862903025,
+    "overall_oof_rmse": 82.79444094387271,
+    "iterations": [248, 441, 286, 439, 403],
+    "total_feature_counts": [800, 800, 795, 787, 793],
+    "amenity_feature_counts": [94, 94, 94, 94, 94],
+    "runtime_seconds": 228.7671596999935,
+    "negative_predictions": 2
+  },
+  "comparison": {
+    "e014_mean_rmse": 85.34513769152824,
+    "mean_rmse_improvement": 2.62569603473095,
+    "fold_improvements": [
+      3.0140161421345795,
+      3.267636927700579,
+      1.7652883192199766,
+      2.126375050902638,
+      2.955163733697063
+    ],
+    "folds_improved": 5,
+    "retention_threshold": "mean improvement >= 0.5 and at least 4/5 folds improved",
+    "decision": "retain as new best single model"
+  },
+  "local_artifacts": {
+    "oof_rows": 33538,
+    "oof_all_finite": true,
+    "oof_sha256": "d9e3583ccc9b9beb741d8d345b1ffb79f7c6da98670bfc1a79a397b7885949d7",
+    "fold_model_count": 5,
+    "artifacts_are_git_ignored": true
+  },
+  "submission": {
+    "generated": false,
+    "uploaded": false
+  }
+}

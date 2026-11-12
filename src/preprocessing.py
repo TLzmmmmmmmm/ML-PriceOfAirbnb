@@ -206,6 +206,7 @@ def add_engineered_features(
 def prepare_structured_frame(
     frame: pd.DataFrame,
     feature_groups: tuple[str, ...] = (),
+    extra_categorical_columns: tuple[str, ...] = (),
 ) -> pd.DataFrame:
     """Apply stateless parsing and select the structured feature groups."""
     source = add_engineered_features(frame, feature_groups)
@@ -219,7 +220,7 @@ def prepare_structured_frame(
         prepared[column] = parse_percentage(frame[column])
     for column in DATE_COLUMNS:
         prepared[f"{column}_days"] = parse_date_days(frame[column])
-    for column in LOW_CARDINALITY_CATEGORICAL_COLUMNS:
+    for column in (*LOW_CARDINALITY_CATEGORICAL_COLUMNS, *extra_categorical_columns):
         prepared[column] = (
             frame[column].astype("string").fillna(MISSING_CATEGORY).astype(object)
         )
@@ -233,11 +234,20 @@ def prepare_structured_frame(
 class StructuredPreprocessor(BaseEstimator, TransformerMixin):
     """Fit train-only imputers and encoders for structured listing features."""
 
-    def __init__(self, feature_groups: tuple[str, ...] = ()):
+    def __init__(
+        self,
+        feature_groups: tuple[str, ...] = (),
+        extra_categorical_columns: tuple[str, ...] = (),
+    ):
         self.feature_groups = feature_groups
+        self.extra_categorical_columns = extra_categorical_columns
 
     def fit(self, frame: pd.DataFrame, y: object = None) -> "StructuredPreprocessor":
-        prepared = prepare_structured_frame(frame, self.feature_groups)
+        prepared = prepare_structured_frame(
+            frame,
+            self.feature_groups,
+            self.extra_categorical_columns,
+        )
         numeric_features = (
             *NUMERIC_COLUMNS,
             *CURRENCY_COLUMNS,
@@ -273,7 +283,10 @@ class StructuredPreprocessor(BaseEstimator, TransformerMixin):
                         sparse_output=False,
                         dtype=np.float64,
                     ),
-                    LOW_CARDINALITY_CATEGORICAL_COLUMNS,
+                    (
+                        *LOW_CARDINALITY_CATEGORICAL_COLUMNS,
+                        *self.extra_categorical_columns,
+                    ),
                 ),
             ],
             remainder="drop",
@@ -286,7 +299,11 @@ class StructuredPreprocessor(BaseEstimator, TransformerMixin):
     def transform(self, frame: pd.DataFrame) -> np.ndarray:
         check_is_fitted(self, "transformer_")
         return self.transformer_.transform(
-            prepare_structured_frame(frame, self.feature_groups)
+            prepare_structured_frame(
+                frame,
+                self.feature_groups,
+                self.extra_categorical_columns,
+            )
         )
 
     def get_feature_names_out(self) -> np.ndarray:

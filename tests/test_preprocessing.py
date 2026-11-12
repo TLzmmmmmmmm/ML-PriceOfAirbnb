@@ -88,6 +88,50 @@ def test_unseen_categories_keep_the_same_output_schema():
     assert validation_matrix[0, room_columns].sum() == 0.0
 
 
+def test_extra_categorical_columns_encode_missing_and_ignore_unseen_values():
+    from src.preprocessing import StructuredPreprocessor
+
+    training = _structured_frame(rows=3)
+    training["neighbourhood_cleansed"] = ["Chelsea", None, "Chelsea"]
+    training["zipcode"] = ["10001", "10002", "10001"]
+    validation = _structured_frame(rows=2)
+    validation["neighbourhood_cleansed"] = ["Unseen area", None]
+    validation["zipcode"] = ["99999", "10002"]
+
+    preprocessor = StructuredPreprocessor(
+        extra_categorical_columns=("neighbourhood_cleansed", "zipcode")
+    ).fit(training)
+    transformed = preprocessor.transform(validation)
+    names = preprocessor.get_feature_names_out().tolist()
+    neighbourhood_positions = [
+        index
+        for index, name in enumerate(names)
+        if name.startswith("neighbourhood_cleansed_")
+    ]
+    zipcode_positions = [
+        index for index, name in enumerate(names) if name.startswith("zipcode_")
+    ]
+
+    assert "neighbourhood_cleansed___MISSING__" in names
+    assert transformed[0, neighbourhood_positions].sum() == 0.0
+    assert transformed[1, neighbourhood_positions].sum() == 1.0
+    assert transformed[0, zipcode_positions].sum() == 0.0
+    assert transformed[1, zipcode_positions].sum() == 1.0
+
+
+def test_extra_categorical_columns_remain_excluded_by_default():
+    from src.preprocessing import StructuredPreprocessor
+
+    training = _structured_frame(rows=2)
+    training["neighbourhood_cleansed"] = ["Chelsea", "SoHo"]
+    training["zipcode"] = ["10001", "10002"]
+
+    names = StructuredPreprocessor().fit(training).get_feature_names_out().tolist()
+
+    assert not any(name.startswith("neighbourhood_cleansed_") for name in names)
+    assert not any(name.startswith("zipcode_") for name in names)
+
+
 def test_preprocessing_excludes_deferred_fields_and_does_not_mutate_input():
     from src.preprocessing import StructuredPreprocessor
 

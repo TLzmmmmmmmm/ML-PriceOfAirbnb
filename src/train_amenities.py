@@ -22,6 +22,7 @@ def evaluate_amenities_cv(
     experiment_id: str,
     min_frequency: float = 0.01,
     max_features: int = 100,
+    extra_categorical_columns: tuple[str, ...] = (),
 ) -> dict[str, object]:
     """Evaluate E009 with fold-trained amenity count and indicators."""
     artifact_dir = Path(artifact_dir)
@@ -40,7 +41,10 @@ def evaluate_amenities_cv(
         training_frame = frame.loc[~validation_mask]
         validation_frame = frame.loc[validation_mask]
 
-        structured = StructuredPreprocessor(feature_groups=("text_structure",))
+        structured = StructuredPreprocessor(
+            feature_groups=("text_structure",),
+            extra_categorical_columns=extra_categorical_columns,
+        )
         amenities = AmenitiesTransformer(
             include_indicators=include_indicators,
             min_frequency=min_frequency,
@@ -98,5 +102,6 @@ def evaluate_amenities_cv(
         "include_indicators": include_indicators,
         "min_frequency": min_frequency,
         "max_features": max_features,
+        "extra_categorical_columns": list(extra_categorical_columns),
         "oof_predictions": oof_predictions,
     }

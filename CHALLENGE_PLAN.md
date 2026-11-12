@@ -56,6 +56,12 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | 14 | Complete | E015 primary and E014 secondary selected on Kaggle; confirmation shows `2/2` |
 | 15 | Complete | Final E014/E015 submissions independently reproduced exactly; repository archived safely |
 
+## Optimization phase
+
+| Experiment | Status | Main result |
+|---:|---|---|
+| E016 | Complete | Adding fold-trained `neighbourhood_cleansed` and `zipcode` one-hot features to E014 improved all five folds and reduced mean RMSE from `85.3451` to `82.7194`; retained as the new best single model |
+
 ## Step 1: Audit files, data, and rules
 
 ### Objective

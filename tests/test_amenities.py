@@ -111,6 +111,16 @@ def test_amenities_cv_keeps_validation_only_tokens_out_of_fold_vocabulary(
     frame = _amenities_training_frame()
     folds = pd.Series(np.arange(len(frame)) % 3, index=frame.index, name="fold")
     frame.loc[folds.eq(0), "amenities"] = "{Validation exclusive amenity}"
+    frame["neighbourhood_cleansed"] = np.where(
+        np.arange(len(frame)) % 2 == 0,
+        "Chelsea",
+        "SoHo",
+    )
+    frame["zipcode"] = np.where(
+        np.arange(len(frame)) % 2 == 0,
+        "10001",
+        "10002",
+    )
 
     result = evaluate_amenities_cv(
         frame,
@@ -120,13 +130,23 @@ def test_amenities_cv_keeps_validation_only_tokens_out_of_fold_vocabulary(
         max_features=10,
         artifact_dir=tmp_path,
         experiment_id="TEST_AMENITIES",
+        extra_categorical_columns=("neighbourhood_cleansed", "zipcode"),
     )
 
     fold_zero = joblib.load(tmp_path / "TEST_AMENITIES_fold_0.joblib")
+    feature_names = (
+        fold_zero["structured_preprocessor"].get_feature_names_out().tolist()
+    )
     assert (
         "validation exclusive amenity"
         not in fold_zero["amenities_transformer"].selected_amenities_
     )
+    assert "neighbourhood_cleansed_Chelsea" in feature_names
+    assert "zipcode_10001" in feature_names
+    assert result["extra_categorical_columns"] == [
+        "neighbourhood_cleansed",
+        "zipcode",
+    ]
     assert result["oof_predictions"].shape == (len(frame),)
     assert np.isfinite(result["oof_predictions"]).all()
     assert result["include_indicators"] is True
