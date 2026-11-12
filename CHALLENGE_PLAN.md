@@ -50,7 +50,8 @@ Official competition files must remain unchanged and excluded from Git. Generate
 | 8 | Complete | E009 text-structure features improved mean five-fold RMSE to `87.1546`; three other groups rejected |
 | 9 | Complete | E012 combined TF-IDF reached mean RMSE `104.4921`; retained as an ensemble candidate |
 | 10 | Complete | E014 frequent amenity indicators improved all folds and reduced mean RMSE to `85.3451` |
-| 11–15 | Not started | Must follow the confirmation rule before execution |
+| 11 | Complete | E015 weighted ensemble improved all folds and reduced mean RMSE to `84.5293` |
+| 12–15 | Not started | Must follow the confirmation rule before execution |
 
 ## Step 1: Audit files, data, and rules
 

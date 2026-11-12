@@ -1,0 +1,34 @@
+{
+  "experiment_id": "E015",
+  "name": "weighted_oof_ensemble",
+  "evaluated_at": "2026-11-11",
+  "selection_source": "fixed local OOF predictions only; no leaderboard input",
+  "components": {
+    "E014": {"weight": 0.75, "oof_sha256": "21d8e68257928cdec89670d07baf6f394e15fec3921075a357b4b8efec83a658"},
+    "E009": {"weight": 0.10, "oof_sha256": "6598730007d77121f93be589566c2466bfaab8492fea774565996ea3ce6e184d"},
+    "E012": {"weight": 0.15, "oof_sha256": "6261faa53800b074d379ac3d34c086ccb5f7d89737d6b075150cd0de79d465ec"}
+  },
+  "candidate_policy": {
+    "E014_E009_other_weights": [0.10, 0.25, 0.50],
+    "E014_E012_text_weights": [0.05, 0.10, 0.15, 0.20],
+    "E014_E011_text_weights": [0.05, 0.10, 0.15],
+    "three_model_candidates_tested": 1
+  },
+  "validation": {"n_splits": 5, "random_state": 151, "metric": "RMSE in original price dollars"},
+  "results": {
+    "fold_rmse": [81.05808642071491, 88.86782273591052, 82.25206287983494, 88.76244875220047, 81.70610217194414],
+    "mean_rmse": 84.52930459212101,
+    "std_rmse": 3.5198837048679223,
+    "overall_oof_rmse": 84.6025163677592,
+    "negative_predictions": 0
+  },
+  "comparison": {
+    "mean_rmse_improvement_over_e014": 0.81583309940723,
+    "folds_improved_over_e014": 5,
+    "best_pair_mean_rmse": 84.58855639005557,
+    "best_pair_components": {"E014": 0.85, "E012": 0.15},
+    "decision": "retain as primary Step 12 candidate"
+  },
+  "reproduction": {"fold_metrics_match": true, "oof_sha256_match": true},
+  "local_artifacts": {"oof_predictions": "models/E015_oof_predictions.npy", "oof_sha256": "745cc73a522b6d5479cc7f918fc8e8339c42e41c489a198538ed003ff349fd12", "artifacts_are_git_ignored": true}
+}

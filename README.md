@@ -65,4 +65,6 @@ Step 9 fits fold-local word and character TF-IDF models. E012 combines both spar
 
 Step 10 parses the supplied amenities and learns frequent indicators inside each training fold. E014 adds amenity count plus 93 stable frequent indicators to E009 and improves mean five-fold RMSE from `87.1546` to `85.3451`, with gains in every fold. See `reports/amenities_ablation.md`.
 
+Step 11 evaluates a small predeclared set of OOF weighted averages. E015 combines E014 (75%), E009 (10%), and E012 (15%), improving all five folds and lowering mean RMSE to `84.5293`. E014 remains the best single-model alternative. See `reports/ensemble_comparison.md`.
+
 Step 7 compared raw squared-error training with a log target and absolute-error loss. Raw dollar price with squared-error loss remains selected because both alternatives increased total RMSE by underpredicting expensive listings. See `reports/target_strategy_comparison.md`.
